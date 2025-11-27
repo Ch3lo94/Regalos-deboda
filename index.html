@@ -5,135 +5,298 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Formulario de regalos</title>
   <script src="https://accounts.google.com/gsi/client" async defer></script>
+
   <style>
-    body{font-family:Arial, sans-serif;max-width:900px;margin:18px auto;padding:12px;}
-    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;}
-    .card{border:1px solid #ddd;border-radius:8px;padding:12px;background:#fff;}
-    .item img{width:100%;height:140px;object-fit:cover;border-radius:6px}
-    .disabled{opacity:0.45;pointer-events:none;}
+    /* ─────────────────────────────────────
+       ESTILO GENERAL
+    ───────────────────────────────────── */
+    body {
+      font-family: "Segoe UI", Roboto, Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f1f3f7;
+      color: #333;
+      display: flex;
+      justify-content: center;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 860px;
+      padding: 18px;
+      margin-top: 20px;
+    }
+
+    h2 {
+      text-align: center;
+      color: #222;
+      font-weight: 600;
+      margin-bottom: 20px;
+      letter-spacing: 0.5px;
+    }
+
+    .card {
+      background: #fff;
+      border-radius: 14px;
+      padding: 20px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.07);
+      margin-bottom: 20px;
+    }
+
+    /* ─────────────────────────────────────
+       GRID RESPONSIVO
+    ───────────────────────────────────── */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 16px;
+      margin-top: 15px;
+    }
+
+    @media (max-width: 480px) {
+      .grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    .item {
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .item:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+    }
+
+    .item img {
+      width: 100%;
+      height: 135px;
+      object-fit: cover;
+      border-radius: 10px;
+      margin-bottom: 8px;
+    }
+
+    .disabled {
+      opacity: 0.45;
+      pointer-events: none;
+    }
+
+    /* ─────────────────────────────────────
+        INPUTS Y BOTONES
+    ───────────────────────────────────── */
+    input[type="text"], input[type="number"] {
+      padding: 10px;
+      width: 100%;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      margin-top: 8px;
+      font-size: 15px;
+      box-sizing: border-box;
+    }
+
+    button {
+      background: #4a68ff;
+      color: white;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: 600;
+      width: 100%;
+      transition: background 0.2s;
+      margin-top: 15px;
+    }
+
+    button:hover {
+      background: #3957e8;
+    }
+
+    button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    #statusMsg, #resultMsg {
+      margin-top: 12px;
+      font-weight: 600;
+      text-align: center;
+      font-size: 15px;
+    }
+
+    #statusMsg { color: #c0392b; }
+    #resultMsg { color: #2ecc71; }
+
+    /* Mobile-friendly spacing */
+    #fullName {
+      margin-top: 15px;
+    }
+
+    /* Suavizar animaciones */
+    * {
+      scroll-behavior: smooth;
+    }
+
   </style>
 </head>
+
 <body>
-  <h2>Formulario de regalos</h2>
-  <div class="card">
-    <div id="gSign"></div>
-    <div id="userInfo" style="display:none;">
-      <b>Email:</b> <span id="userEmail"></span><br>
-      <b>Nombre:</b> <span id="userName"></span><br>
-    </div>
+<div class="container">
 
-    <div id="statusMsg" style="color:crimson;margin:8px 0;"></div>
+<h2>Formulario de regalos</h2>
 
-    <div id="itemsArea" class="grid"></div>
+<div class="card">
+  <div id="gSign"></div>
 
-    <div style="margin-top:12px;">
-      <input id="fullName" placeholder="Nombre completo" style="width:100%;padding:8px;margin-top:6px;display:none;">
-      <button id="submitBtn" style="margin-top:10px;display:none;">Enviar selección</button>
-      <span id="resultMsg" style="margin-left:12px;"></span>
-    </div>
+  <div id="userInfo" style="display:none;margin-top:10px;font-size:15px;">
+    <b>Email:</b> <span id="userEmail"></span><br>
+    <b>Nombre:</b> <span id="userName"></span><br>
   </div>
 
+  <div id="statusMsg"></div>
+  <div id="itemsArea" class="grid"></div>
+
+  <input id="fullName" placeholder="Nombre completo" style="display:none;">
+  <button id="submitBtn" style="display:none;">Enviar selección</button>
+
+  <div id="resultMsg"></div>
+</div>
+
+</div>
+
+
 <script>
-const CLIENT_ID = '342769047778-jc52eh3n59a3vjocagmomi8pln5kbqv3.apps.googleusercontent.com';
-const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbz_d9cjb_2bPIKJ9mfTzbO47CdPouRxFUbhcgMC1tK-V4gN4HKJInGjKrbS0tRWB-7E/exec'; // ej: https://script.google.com/macros/s/AKfy.../exec
+const CLIENT_ID = "342769047778-jc52eh3n59a3vjocagmomi8pln5kbqv3.apps.googleusercontent.com";
+const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbz_d9cjb_2bPIKJ9mfTzbO47CdPouRxFUbhcgMC1tK-V4gN4HKJInGjKrbS0tRWB-7E/exec";
 
 let idToken = null;
 let currentUser = null;
 let items = [];
+let alreadySubmitted = false;
 
-// Inicializar botón GSI
 function handleCredentialResponse(resp){
   idToken = resp.credential;
   const payload = parseJwt(idToken);
   currentUser = payload;
-  document.getElementById('userEmail').textContent = payload.email || '';
-  document.getElementById('userName').textContent = payload.name || '';
-  document.getElementById('userInfo').style.display = 'block';
-  document.getElementById('fullName').style.display = 'block';
-  document.getElementById('submitBtn').style.display = 'inline-block';
-  document.getElementById('fullName').value = payload.name || '';
+
+  document.getElementById("userEmail").textContent = payload.email || "";
+  document.getElementById("userName").textContent = payload.name || "";
+  document.getElementById("userInfo").style.display = "block";
+  document.getElementById("fullName").style.display = "block";
+  document.getElementById("submitBtn").style.display = "block";
+  document.getElementById("fullName").value = payload.name || "";
 }
+
 window.onload = function(){
   google.accounts.id.initialize({ client_id: CLIENT_ID, callback: handleCredentialResponse });
-  google.accounts.id.renderButton(document.getElementById('gSign'), { theme:'outline', size:'large' });
+  google.accounts.id.renderButton(document.getElementById("gSign"), { theme:"outline", size:"large" });
+
   fetchState();
-  document.getElementById('submitBtn').addEventListener('click', sendSelection);
+  document.getElementById("submitBtn").addEventListener("click", sendSelection);
 };
 
 function parseJwt(token){
-  try{
+  try {
     const base64Url = token.split('.')[1];
     const base64 = base64Url.replace(/-/g,'+').replace(/_/g,'/');
-    const jsonPayload = decodeURIComponent(atob(base64).split('').map(c=>'%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)).join(''));
+    const jsonPayload = decodeURIComponent(
+      atob(base64).split('').map(c=>'%' + ('00'+c.charCodeAt(0).toString(16)).slice(-2)).join('')
+    );
     return JSON.parse(jsonPayload);
-  } catch(e){return {};}
+  } catch(e){ return {}; }
 }
 
 async function fetchState(){
-  const r = await fetch(WEB_APP_URL + '?action=state');
+  const r = await fetch(WEB_APP_URL + "?action=state");
   const j = await r.json();
+
   if (j.items) {
     items = j.items;
     renderItems();
   } else {
-    document.getElementById('statusMsg').textContent = j.error || 'Error al obtener estado';
+    document.getElementById("statusMsg").textContent = j.error || "Error al obtener estado";
   }
 }
 
 function renderItems(){
-  const area = document.getElementById('itemsArea');
-  area.innerHTML = '';
+  const area = document.getElementById("itemsArea");
+  area.innerHTML = "";
+
   items.forEach(it => {
-    const div = document.createElement('div');
-    div.className = 'card item';
-    if (it.remaining <= 0) div.classList.add('disabled');
+    const div = document.createElement("div");
+    div.className = "card item";
+    if (it.remaining <= 0) div.classList.add("disabled");
+
     div.innerHTML = `
-      <img src="${it.img}" alt="${it.name}" />
-      <h4>${it.name}</h4>
-      <div>Disponibles: <span class="remaining">${it.remaining}</span></div>
-      <div style="margin-top:6px;"><input type="number" min="0" max="${it.remaining}" value="0" style="width:70px" data-idx="${it.index}" /></div>
+      <img src="${it.img}" alt="${it.name}">
+      <h4 style="margin:5px 0 8px;">${it.name}</h4>
+      <div style="font-size:14px;margin-bottom:6px;">Disponibles: <b>${it.remaining}</b></div>
+      <input type="number" min="0" max="${it.remaining}" value="0" data-idx="${it.index}">
     `;
+
     area.appendChild(div);
   });
 }
 
 async function sendSelection(){
-  if (!idToken) { document.getElementById('resultMsg').textContent = 'Inicia sesión primero.'; return; }
-  const fullName = (document.getElementById('fullName').value || '').trim();
-  if (!fullName) { document.getElementById('resultMsg').textContent = 'Ingresa nombre completo.'; return; }
+  if (alreadySubmitted) {
+    document.getElementById("resultMsg").textContent = "Ya enviaste una selección.";
+    return;
+  }
 
-  // leer cantidades >0
-  const inputs = Array.from(document.querySelectorAll('#itemsArea input[type=number]'));
+  if (!idToken) {
+    document.getElementById("resultMsg").textContent = "Inicia sesión para continuar.";
+    return;
+  }
+
+  const btn = document.getElementById("submitBtn");
+  btn.disabled = true;
+
+  const fullName = document.getElementById("fullName").value.trim();
+  if (!fullName) {
+    document.getElementById("resultMsg").textContent = "Ingresa tu nombre completo.";
+    btn.disabled = false;
+    return;
+  }
+
+  const inputs = Array.from(document.querySelectorAll("#itemsArea input[type=number]"));
   const selections = [];
   for (const inp of inputs) {
     const v = Number(inp.value) || 0;
     const idx = Number(inp.dataset.idx);
-    for (let i=0;i<v;i++) selections.push(idx);
+    for (let i = 0; i < v; i++) selections.push(idx);
   }
-  if (selections.length === 0) { document.getElementById('resultMsg').textContent = 'Selecciona al menos un item.'; return; }
 
-  // enviar POST
+  if (selections.length === 0) {
+    document.getElementById("resultMsg").textContent = "Debes elegir al menos un regalo.";
+    btn.disabled = false;
+    return;
+  }
+
   try {
     const res = await fetch(WEB_APP_URL, {
-      method: 'POST',
-      headers: {'Content-Type':'application/json'},
-      body: JSON.stringify({ id_token: idToken, fullName: fullName, selections: selections })
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({ id_token:idToken, fullName, selections })
     });
+
     const j = await res.json();
     if (j.success) {
+      alreadySubmitted = true;
       items = j.items;
       renderItems();
-      document.getElementById('resultMsg').textContent = 'Gracias — tu selección fue registrada.';
-      // opcional: limpiar inputs
-      document.querySelectorAll('#itemsArea input[type=number]').forEach(i=>i.value=0);
+      document.getElementById("resultMsg").textContent = "✔️ ¡Tu selección fue registrada con éxito!";
+      inputs.forEach(i => i.value = 0);
     } else {
-      document.getElementById('resultMsg').textContent = 'Error: ' + (j.error || 'desconocido');
+      document.getElementById("resultMsg").textContent = "Error: " + (j.error || "Desconocido");
+      btn.disabled = false;
     }
-  } catch (e) {
-    document.getElementById('resultMsg').textContent = 'Error de conexión';
+
+  } catch(e){
+    document.getElementById("resultMsg").textContent = "Error de conexión.";
+    btn.disabled = false;
   }
 }
 </script>
 </body>
 </html>
-
