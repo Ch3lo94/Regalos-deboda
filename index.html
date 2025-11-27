@@ -7,9 +7,6 @@
   <script src="https://accounts.google.com/gsi/client" async defer></script>
 
   <style>
-    /* ─────────────────────────────────────
-       ESTILO GENERAL
-    ───────────────────────────────────── */
     body {
       font-family: "Segoe UI", Roboto, Arial, sans-serif;
       margin: 0;
@@ -43,9 +40,6 @@
       margin-bottom: 20px;
     }
 
-    /* ─────────────────────────────────────
-       GRID RESPONSIVO
-    ───────────────────────────────────── */
     .grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
@@ -81,9 +75,6 @@
       pointer-events: none;
     }
 
-    /* ─────────────────────────────────────
-        INPUTS Y BOTONES
-    ───────────────────────────────────── */
     input[type="text"], input[type="number"] {
       padding: 10px;
       width: 100%;
@@ -127,16 +118,7 @@
     #statusMsg { color: #c0392b; }
     #resultMsg { color: #2ecc71; }
 
-    /* Mobile-friendly spacing */
-    #fullName {
-      margin-top: 15px;
-    }
-
-    /* Suavizar animaciones */
-    * {
-      scroll-behavior: smooth;
-    }
-
+    #fullName { margin-top: 15px; }
   </style>
 </head>
 
@@ -167,7 +149,7 @@
 
 <script>
 const CLIENT_ID = "342769047778-jc52eh3n59a3vjocagmomi8pln5kbqv3.apps.googleusercontent.com";
-const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbz_d9cjb_2bPIKJ9mfTzbO47CdPouRxFUbhcgMC1tK-V4gN4HKJInGjKrbS0tRWB-7E/exec";
+const WEB_APP_URL = "https://script.google.com/macros/s/AKfycby7tm3mzzCbNbYQXcwxxv8cK9nuahTTbuDvy-elbyihaURbbZerQGpyj9tEvnVpnxkY/exec";
 
 let idToken = null;
 let currentUser = null;
@@ -298,5 +280,7 @@ async function sendSelection(){
   }
 }
 </script>
+
 </body>
 </html>
+
