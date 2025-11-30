@@ -15,8 +15,8 @@ body {
 /* Encabezados centrados y texto */
 .center { 
   text-align:center; 
-  width:90%;        /* ocupar casi todo el ancho en móviles */
-  max-width:500px;  /* límite en pantallas grandes */
+  width:90%;
+  max-width:500px;
   padding:20px;
   box-sizing:border-box;
   margin:0 auto;
@@ -30,7 +30,7 @@ p  { font-size:16px; line-height:1.4; }
 .welcome-img {
   width:100%;
   max-width:420px;
-  height:auto;       /* escala proporcional */
+  height:auto;
   border-radius:20px;
   box-shadow:0 4px 12px rgba(0,0,0,0.2);
 }
@@ -66,7 +66,7 @@ p  { font-size:16px; line-height:1.4; }
 }
 
 .selected {
-  border:3px solid #d4af37 !important; /* borde dorado */
+  border:3px solid #d4af37 !important;
   box-shadow:0 6px 18px rgba(212,175,55,0.6) !important;
   transform: scale(1.02);
 }
@@ -114,6 +114,23 @@ p  { font-size:16px; line-height:1.4; }
 .g_id_signin iframe {
   margin: 0 auto !important;
   display:block !important;
+}
+
+/* Botón Comprar en tarjeta */
+.buy-btn {
+  display:block;
+  margin-top:10px;
+  padding:8px 12px;
+  background:#d4af37;
+  color:white;
+  text-decoration:none;
+  border-radius:8px;
+  font-weight:bold;
+  text-align:center;
+  transition:0.2s;
+}
+.buy-btn:hover {
+  background:#b8932f;
 }
 
 /* --- Responsive --- */
@@ -170,7 +187,7 @@ p  { font-size:16px; line-height:1.4; }
 
 <!-- Catálogo de regalos -->
 <div id="catalogo" class="hidden">
-  <h1 class="center">Elegí uno o más regalo</h1>
+  <h1 class="center">Podes elegir uno o más regalo</h1>
   <div class="grid-wrapper">
     <div id="grid" class="grid"></div>
   </div>
@@ -237,6 +254,7 @@ async function cargarCatalogo() {
       <div class="card-content">
         <h3>${item.nombre}</h3>
         <p>${item.descripcion || ''}</p>
+        ${item.link ? `<a href="${item.link}" target="_blank" class="buy-btn">Comprar</a>` : ''}
       </div>
     `;
 
