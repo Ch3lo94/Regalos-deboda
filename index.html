@@ -54,10 +54,11 @@ p  { font-size:16px; line-height:1.4; }
   background:white;
   border-radius:14px;
   overflow:hidden;
-  cursor:pointer;
   border:3px solid transparent;
   transition:.25s ease;
   box-shadow:0 4px 12px rgba(0,0,0,0.1);
+  display:flex;
+  flex-direction:column;
 }
 
 .card:hover {
@@ -77,14 +78,17 @@ p  { font-size:16px; line-height:1.4; }
   object-fit:cover;
 }
 
-.card-content { padding:16px; }
+.card-content {
+  padding:16px;
+  flex-grow:1;
+}
 
 .agotado {
   opacity:0.4;
   pointer-events:none;
 }
 
-/* Botón confirmar */
+/* Botón Confirmar selección */
 #confirm-btn {
   display:block;
   margin:25px auto;
@@ -119,8 +123,8 @@ p  { font-size:16px; line-height:1.4; }
 /* Botón Comprar en tarjeta */
 .buy-btn {
   display:block;
-  margin-top:10px;
-  padding:8px 12px;
+  margin-top:12px;
+  padding:10px 15px;
   background:#d4af37;
   color:white;
   text-decoration:none;
@@ -134,19 +138,11 @@ p  { font-size:16px; line-height:1.4; }
 }
 
 /* --- Responsive --- */
-@media (max-width: 1024px) {
-  h1 { font-size:26px; }
-  h2 { font-size:22px; }
-  p  { font-size:15px; }
-  .card img { height:180px; }
-}
-
 @media (max-width: 768px) {
   h1 { font-size:24px; }
   h2 { font-size:20px; }
   p  { font-size:14px; }
   .card img { height:160px; }
-  .card-content { padding:12px; }
 }
 
 @media (max-width: 480px) {
@@ -187,7 +183,7 @@ p  { font-size:16px; line-height:1.4; }
 
 <!-- Catálogo de regalos -->
 <div id="catalogo" class="hidden">
-  <h1 class="center">Podes elegir uno o más regalo</h1>
+  <h1 class="center">Elegí uno o más regalos</h1>
   <div class="grid-wrapper">
     <div id="grid" class="grid"></div>
   </div>
@@ -196,7 +192,6 @@ p  { font-size:16px; line-height:1.4; }
 
 <script>
 const API = "https://script.google.com/macros/s/AKfycbyISWbCW9HkNFs_4tqYFjNrQW6GLU9F-MwytJq1f_ilyB0Y5lF3H7znpV_0CRCWiLSS/exec";
-
 let usuario = null;
 let seleccion = [];
 
@@ -249,6 +244,7 @@ async function cargarCatalogo() {
     card.className = "card";
     if (item.stockRestante <= 0) card.classList.add("agotado");
 
+    // Tarjeta con botón Comprar
     card.innerHTML = `
       <img src="${item.imagen}">
       <div class="card-content">
@@ -258,7 +254,12 @@ async function cargarCatalogo() {
       </div>
     `;
 
-    card.onclick = () => toggle(item.id, card);
+    // Solo seleccionar tarjeta al hacer click en la tarjeta, no en el botón
+    card.addEventListener("click", e => {
+      if(e.target.classList.contains('buy-btn')) return;
+      toggle(item.id, card);
+    });
+
     grid.appendChild(card);
   });
 }
