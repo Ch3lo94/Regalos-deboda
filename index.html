@@ -37,27 +37,21 @@ body {
 
 .hidden { display:none; }
 
-/* ⭐⭐⭐ CENTRADO REAL DEL BOTÓN DE GOOGLE ⭐⭐⭐ */
-#google-btn-wrapper {
-  width:100%;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  margin-top:20px;
-}
-
-.g_id_signin > div,
-.g_id_signin iframe {
-  margin: 0 auto !important;
-  display:block !important;
-}
-
 /* --- Catálogo --- */
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill,minmax(260px,1fr));
+  grid-template-columns: repeat(4, 1fr); /* ⭐ SIEMPRE 4 POR FILA EN PC ⭐ */
   gap: 25px;
   padding: 20px;
+}
+
+/* Responsive para tablets y celulares */
+@media (max-width: 900px) {
+  .grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 500px) {
+  .grid { grid-template-columns: 1fr; }
 }
 
 .card {
@@ -94,6 +88,7 @@ body {
   pointer-events:none;
 }
 
+/* Botón */
 #confirm-btn {
   display:block;
   margin:25px auto;
@@ -110,6 +105,20 @@ body {
   cursor:not-allowed;
 }
 
+/* ⭐⭐⭐ CENTRADO REAL DEL BOTÓN DE GOOGLE ⭐⭐⭐ */
+#google-btn-wrapper {
+  width:100%;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  margin-top:20px;
+}
+
+.g_id_signin > div,
+.g_id_signin iframe {
+  margin: 0 auto !important;
+  display:block !important;
+}
 </style>
 </head>
 
