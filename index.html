@@ -8,79 +8,98 @@
 <style>
 body {
   margin:0;
-  background:#fafafa;
+  background:#f5f5f5;
   font-family:"Segoe UI", sans-serif;
 }
 
-/* Encabezados centrados y texto */
+/* Encabezado */
 .center { 
   text-align:center; 
-  width:90%;        /* ocupar casi todo el ancho en móviles */
-  max-width:500px;  /* límite en pantallas grandes */
+  width:100%;
   padding:20px;
   box-sizing:border-box;
+  max-width:600px;
   margin:0 auto;
 }
 
 h1 { font-size:28px; margin-bottom:15px; }
 h2 { font-size:24px; margin-bottom:10px; }
-p  { font-size:16px; line-height:1.4; }
+p  { font-size:16px; line-height:1.5; }
 
 /* Imagen bienvenida */
 .welcome-img {
-  width:100%;
+  width:90%;
   max-width:420px;
-  height:auto;       /* escala proporcional */
+  height:auto;
   border-radius:20px;
   box-shadow:0 4px 12px rgba(0,0,0,0.2);
 }
 
 .hidden { display:none; }
 
-/* --- Grid adaptativo --- */
+/* ==== GRID ESTILO CATÁLOGO (como tu segunda imagen) ==== */
 .grid-wrapper {
   width:100%;
-  padding:20px;
+  padding:15px 10px 40px;
   box-sizing:border-box;
 }
 
 .grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: 20px;
+  display:grid;
+  grid-template-columns:repeat(auto-fill, minmax(170px, 1fr));
+  gap:18px;
+  max-width:900px;
+  margin:0 auto;
 }
 
+/* Tarjeta visual */
 .card {
   background:white;
   border-radius:14px;
   overflow:hidden;
   cursor:pointer;
-  border:3px solid transparent;
+  border:2px solid transparent;
   transition:.25s ease;
-  box-shadow:0 4px 12px rgba(0,0,0,0.1);
+  box-shadow:0 4px 10px rgba(0,0,0,0.12);
 }
 
 .card:hover {
-  transform: translateY(-4px);
-  box-shadow:0 6px 16px rgba(0,0,0,0.12);
+  transform:translateY(-4px);
+  box-shadow:0 6px 14px rgba(0,0,0,0.2);
 }
 
 .selected {
-  border:3px solid #d4af37 !important; /* borde dorado */
+  border:3px solid #d4af37 !important;
   box-shadow:0 6px 18px rgba(212,175,55,0.6) !important;
-  transform: scale(1.02);
+  transform:scale(1.02);
 }
 
 .card img {
   width:100%;
-  height:200px;
+  height:150px;
   object-fit:cover;
 }
 
-.card-content { padding:16px; }
+.card-content {
+  padding:12px 14px;
+}
 
+.card-content h3 {
+  font-size:15px;
+  font-weight:600;
+  margin:0 0 6px 0;
+  min-height:40px;
+}
+
+.card-content p {
+  font-size:13px;
+  margin:0;
+  color:#555;
+}
+
+/* Agotado */
 .agotado {
-  opacity:0.4;
+  opacity:0.45;
   pointer-events:none;
 }
 
@@ -101,7 +120,7 @@ p  { font-size:16px; line-height:1.4; }
   cursor:not-allowed;
 }
 
-/* Botón Google centrado */
+/* Sign-in Google */
 #google-btn-wrapper {
   width:100%;
   display:flex;
@@ -110,70 +129,49 @@ p  { font-size:16px; line-height:1.4; }
   margin-top:20px;
 }
 
-.g_id_signin > div,
-.g_id_signin iframe {
-  margin: 0 auto !important;
-  display:block !important;
-}
-
-/* --- Responsive --- */
-@media (max-width: 1024px) {
-  h1 { font-size:26px; }
-  h2 { font-size:22px; }
-  p  { font-size:15px; }
-  .card img { height:180px; }
-}
-
-@media (max-width: 768px) {
-  h1 { font-size:24px; }
-  h2 { font-size:20px; }
-  p  { font-size:14px; }
-  .card img { height:160px; }
-  .card-content { padding:12px; }
-}
-
-@media (max-width: 480px) {
-  h1 { font-size:20px; }
-  h2 { font-size:18px; }
-  p  { font-size:13px; }
+/* Responsivo */
+@media (max-width:480px) {
   .grid {
-    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    grid-template-columns:repeat(2, 1fr);
+    gap:14px;
   }
-  .card img { height:120px; }
-  .card-content { padding:8px; }
-  #confirm-btn { padding:10px 20px; font-size:16px; }
+  .card img { height:130px; }
+  h1 { font-size:22px; }
 }
 </style>
 </head>
 
 <body>
 
-<!-- Pantalla de bienvenida / login Google -->
+<!-- Pantalla bienvenida -->
 <div id="welcome" class="center">
-  <img class="welcome-img" src="https://raw.githubusercontent.com/Ch3lo94/Regalos_Boda/main/images/IMG-20251127-WA0008.jpg">
+  <img class="welcome-img"
+       src="https://raw.githubusercontent.com/Ch3lo94/Regalos_Boda/main/images/IMG-20251127-WA0008.jpg">
+
   <h2>Nos ayudarías mucho con estas cosas que nos faltan ❤️</h2>
   <p>Ingresá con tu cuenta de Google y seleccioná lo que desees regalarnos.</p>
 
   <div id="google-btn-wrapper">
-      <div id="g_id_onload"
-        data-client_id="342769047778-jc52eh3n59a3vjocagmomi8pln5kbqv3.apps.googleusercontent.com"
-        data-callback="handleCredentialResponse">
-      </div>
+    <div id="g_id_onload"
+      data-client_id="342769047778-jc52eh3n59a3vjocagmomi8pln5kbqv3.apps.googleusercontent.com"
+      data-callback="handleCredentialResponse">
+    </div>
 
-      <div class="g_id_signin"
-        data-type="standard"
-        data-size="large"
-        data-theme="filled_blue">
-      </div>
+    <div class="g_id_signin"
+      data-type="standard"
+      data-size="large"
+      data-theme="filled_blue">
+    </div>
   </div>
 </div>
 
-<!-- Catálogo de regalos -->
+<!-- Catálogo -->
 <div id="catalogo" class="hidden">
   <h1 class="center">Elegí uno o más regalo</h1>
   <div class="grid-wrapper">
     <div id="grid" class="grid"></div>
   </div>
+
   <button id="confirm-btn" disabled>Confirmar selección</button>
 </div>
 
@@ -183,7 +181,7 @@ const API = "https://script.google.com/macros/s/AKfycbyISWbCW9HkNFs_4tqYFjNrQW6G
 let usuario = null;
 let seleccion = [];
 
-// Mostrar mensaje final
+/* Mensaje final */
 function mostrarMensajeFinal() {
   document.body.innerHTML = `
     <div class="center">
@@ -192,7 +190,7 @@ function mostrarMensajeFinal() {
     </div>`;
 }
 
-// Login Google
+/* Login Google */
 async function handleCredentialResponse(response) {
   const payload = JSON.parse(atob(response.credential.split('.')[1]));
   usuario = {
@@ -220,7 +218,7 @@ async function handleCredentialResponse(response) {
   cargarCatalogo();
 }
 
-// Cargar catálogo
+/* Cargar catálogo */
 async function cargarCatalogo() {
   const res = await fetch(API);
   const items = await res.json();
@@ -245,7 +243,7 @@ async function cargarCatalogo() {
   });
 }
 
-// Selección
+/* Selección */
 function toggle(id, card) {
   if (seleccion.includes(id)) {
     seleccion = seleccion.filter(x => x !== id);
@@ -257,7 +255,7 @@ function toggle(id, card) {
   document.getElementById("confirm-btn").disabled = seleccion.length === 0;
 }
 
-// Confirmar selección
+/* Confirmar */
 document.getElementById("confirm-btn").onclick = async () => {
   const resp = await fetch(API, {
     method: "POST",
